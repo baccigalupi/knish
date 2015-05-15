@@ -1,5 +1,5 @@
 module Knish
-  class CollectionConfig < Struct.new(:path, :db_dir)
+  class DirConfig < Struct.new(:path, :db_dir)
     def next
       current_size + 1
     end

@@ -1,3 +1,3 @@
 require "knish/version"
-require "knish/collection_config"
+require "knish/dir_config"
 

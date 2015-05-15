@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
-describe Knish::CollectionConfig do
-  let(:config) { Knish::CollectionConfig.new('projects', db_fixture_path) }
+RSpec.describe Knish::DirConfig do
+  let(:config) { Knish::DirConfig.new('projects', db_fixture_path) }
   let(:db_fixture_path) { File.dirname(__FILE__) + "/fixtures/db/knish" }
 
   describe '#root' do
@@ -11,24 +11,17 @@ describe Knish::CollectionConfig do
   end
 
   describe '#next' do
-    before do
-      FileUtils.rm_rf("#{config.root}/1")
-    end
+    before { clear_db(db_fixture_path) }
+    after  { clear_db(db_fixture_path) }
 
-    after do
-      FileUtils.rm_rf("#{config.root}/1")
-    end
-
-    describe 'when there are no models in the collection' do
+    context 'when there are no models in the collection' do
       it 'returns 1' do
         expect(config.next).to eq(1)
       end
     end
 
-    describe 'when there are already models in the system' do
-      before do
-        FileUtils.mkdir_p("#{config.root}/1")
-      end
+    context 'when there are already models in the system' do
+      before { FileUtils.mkdir_p("#{config.root}/1") }
 
       it 'returns the next available id' do
         expect(config.next).to eq(2)
