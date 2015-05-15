@@ -8,6 +8,10 @@ module Knish
       "#{db_directory}/#{path}"
     end
 
+    def data_file
+      'data.json'
+    end
+
     private
 
     def existing_ids
