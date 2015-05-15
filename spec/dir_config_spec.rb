@@ -1,8 +1,7 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 RSpec.describe Knish::DirConfig do
   let(:config) { Knish::DirConfig.new('projects', db_fixture_path) }
-  let(:db_fixture_path) { File.dirname(__FILE__) + "/fixtures/db/knish" }
 
   describe '#root' do
     it 'returns the collection root path' do
@@ -25,6 +24,14 @@ RSpec.describe Knish::DirConfig do
 
       it 'returns the next available id' do
         expect(config.next).to eq(2)
+      end
+    end
+
+    context 'when a model is missing but was built' do
+      before { FileUtils.mkdir_p("#{config.root}/2") }
+
+      it 'returns the next available id' do
+        expect(config.next).to eq(3)
       end
     end
   end

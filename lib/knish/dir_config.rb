@@ -1,7 +1,7 @@
 module Knish
   class DirConfig < Struct.new(:path, :db_dir)
     def next
-      current_size + 1
+      (existing_ids.max || 0) + 1
     end
 
     def root
@@ -10,8 +10,8 @@ module Knish
 
     private
 
-    def current_size
-      Dir.glob("#{root}/*").size
+    def existing_ids
+      Dir.glob("#{root}/*").map{|d| d.split('/').last.to_i }
     end
 
     def db_directory
