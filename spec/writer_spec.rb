@@ -46,10 +46,28 @@ RSpec.describe Knish::Writer do
       expect(File.exist?("#{writer.root}/data.json")).to eq(true)
     end
 
-    it 'creates a data.json file in the root directory' do
+    it 'has the right data' do
       writer.save_json({hello: 'knish'})
       data = JSON.load(File.read("#{writer.root}/data.json"))
       expect(data).to eq({'hello' => 'knish'})
+    end
+  end
+
+  describe '#save_markdown' do
+    it 'will build the root if it does not exist' do
+      writer.save_markdown({description: '#Description'})
+      expect(File.exist?(writer.root)).to eq(true)
+    end
+
+    it 'creates file with named for the key' do
+      writer.save_markdown({description: '#Description'})
+      expect(File.exist?("#{writer.root}/_description.md")).to eq(true)
+    end
+
+    it 'has the markdown' do
+      writer.save_markdown({description: '#Description'})
+      data = File.read("#{writer.root}/_description.md")
+      expect(data).to eq('#Description')
     end
   end
 end

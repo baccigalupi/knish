@@ -14,7 +14,14 @@ module Knish
 
     def save_json(attributes)
       make_root
-      File.open("#{root}/#{config.data_file}", 'w') { |f| f.write(attributes.to_json) }
+      write_file(config.data_file, attributes.to_json)
+    end
+
+    def save_markdown(attributes)
+      make_root
+      attributes.each do |key, data|
+        write_file("_#{key}.md", data)
+      end
     end
 
     def root
@@ -22,6 +29,10 @@ module Knish
     end
 
     private
+
+    def write_file(filename, data)
+      File.open("#{root}/#{filename}", 'w') { |f| f.write(data) }
+    end
 
     def make_root
       FileUtils.mkdir_p(root) unless File.exist?(root)
