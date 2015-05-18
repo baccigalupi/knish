@@ -3,5 +3,13 @@ def clear_db(path)
 end
 
 def db_fixture_path
-  File.dirname(__FILE__) + "/../fixtures/db/knish"
+  File.expand_path(File.dirname(__FILE__) + "/../fixtures/db/knish")
 end
+
+def fixture_db_config
+  c = Knish::DbConfig.new
+  c.db_directory = File.expand_path(File.dirname(__FILE__) + "/../fixtures/db")
+  c
+end
+
+

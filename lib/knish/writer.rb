@@ -14,7 +14,7 @@ module Knish
 
     def save_json(attributes)
       make_root
-      write_file(config.data_file, attributes.to_json)
+      write_file(config.data_filename, attributes.to_json)
     end
 
     def save_markdown(attributes)

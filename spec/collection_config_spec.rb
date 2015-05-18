@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-RSpec.describe Knish::DirConfig do
-  let(:config) { Knish::DirConfig.new('projects', db_fixture_path) }
+RSpec.describe Knish::CollectionConfig do
+  let(:config) { Knish::CollectionConfig.new(fixture_db_config, 'projects') }
 
   describe '#root' do
     it 'returns the collection root path' do
-      expect(config.root).to eq("#{db_fixture_path}/projects")
+      expect(config.root).to eq(File.expand_path("#{db_fixture_path}/projects"))
     end
   end
 
