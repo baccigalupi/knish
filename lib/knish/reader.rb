@@ -4,7 +4,7 @@ module Knish
 
     def initialize(config, id)
       @config = config
-      @id = id || @config.next
+      @config.id = id
     end
 
     def get_json
@@ -12,21 +12,17 @@ module Knish
     end
 
     def get_markdown(key)
-      read_file("#{root}/_#{key}.md") || ""
+      read_file("_#{key}.md") || ""
     end
 
     def template(key)
-      "#{config.view_to_db_path}/#{config.db_name}/#{config.path}/#{id}/#{key}"
-    end
-
-    def root
-      "#{config.root}/#{id}"
+      "#{config.view_to_db_path}/#{config.db_name}/#{config.path}/#{config.id}/#{key}"
     end
 
     private
 
     def read_file(filename)
-      File.read("#{root}/#{filename}") rescue nil
+      File.read("#{config.model_root}/#{filename}") rescue nil
     end
   end
 end
