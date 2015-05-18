@@ -6,7 +6,7 @@ module Knish
       @db_directory ||= `pwd`
     end
 
-    def root
+    def db_root
       "#{db_directory}/#{db_name}"
     end
 

@@ -29,6 +29,6 @@ RSpec.describe Knish, '.configure' do
       config.db_name = 'my-db'
     end
 
-    expect(Knish.config.root).to eq('db_dir/my-db')
+    expect(Knish.config.db_root).to eq('db_dir/my-db')
   end
 end
