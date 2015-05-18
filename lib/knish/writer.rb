@@ -4,12 +4,12 @@ module Knish
 
     def initialize(config, id)
       @config = config
-      @id = id || @config.next
+      @config.id = id if id
     end
 
     def build_directories(directories)
       make_root
-      directories.each {|dir| FileUtils.mkdir_p("#{root}/#{dir}") }
+      directories.each {|dir| FileUtils.mkdir_p("#{config.model_root}/#{dir}") }
     end
 
     def save_json(attributes)
@@ -24,18 +24,14 @@ module Knish
       end
     end
 
-    def root
-      "#{config.root}/#{id}"
-    end
-
     private
 
     def write_file(filename, data)
-      File.open("#{root}/#{filename}", 'w') { |f| f.write(data) }
+      File.open("#{config.model_root}/#{filename}", 'w') { |f| f.write(data) }
     end
 
     def make_root
-      FileUtils.mkdir_p(root) unless File.exist?(root)
+      FileUtils.mkdir_p(config.model_root) unless File.exist?(config.model_root)
     end
   end
 end
