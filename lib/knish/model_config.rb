@@ -22,6 +22,10 @@ module Knish
       @collections ||= []
     end
 
+    def all_attributes
+      data_attributes + markdown_attributes + collections
+    end
+
     def collection_root
       "#{db_config.db_root}/#{path}"
     end

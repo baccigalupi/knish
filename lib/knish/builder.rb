@@ -10,6 +10,7 @@ module Knish
     def make_model
       klass = Class.new(Model)
       klass.config = config
+      klass.send(:attr_accessor, *config.all_attributes)
       klass
     end
 
