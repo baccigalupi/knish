@@ -10,7 +10,7 @@ module Knish
       "#{config.root}/#{path}"
     end
 
-    def_delegators :config, :data_filename
+    def_delegators :config, :view_to_db_path, :db_name, :data_filename
 
     private
 

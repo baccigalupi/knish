@@ -16,6 +16,10 @@ RSpec.describe Knish::Reader do
     it '#get_markdown returns an empty string' do
       expect(reader.get_markdown('key')).to eq("")
     end
+
+    it '#template returns the path as though it were there' do
+      expect(reader.template('key')).to eq("/../../knish/posts/32/key")
+    end
   end
 
   context 'when the data exists' do
@@ -26,6 +30,10 @@ RSpec.describe Knish::Reader do
 
     it '#get_json returns an empty hash' do
       expect(reader.get_json).to eq({'hello' => 'happy json'})
+    end
+
+    it '#template returns the path to the markdown file, rails style' do
+      expect(reader.template('key')).to eq("/../../knish/posts/32/key")
     end
   end
 end
