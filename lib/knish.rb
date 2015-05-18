@@ -1,11 +1,15 @@
 require 'json'
 require 'forwardable'
+require 'delegate'
+require 'fileutils'
 
 require "knish/version"
 require "knish/db_config"
-require "knish/collection_config"
+require "knish/model_config"
 require "knish/writer"
 require "knish/reader"
+require "knish/builder"
+require "knish/model"
 
 module Knish
   def self.clear_config
@@ -18,6 +22,11 @@ module Knish
 
   def self.configure(&block)
     block.call(config)
+  end
+
+  def self.build(path, &block)
+    builder = Builder.new(path, &block)
+    builder.make_model
   end
 end
 
