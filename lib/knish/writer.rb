@@ -9,7 +9,7 @@ module Knish
 
     def build_directories(directories)
       make_root
-      directories.each {|dir| FileUtils.mkdir_p("#{config.model_root}/#{dir}") }
+      directories.each {|dir| make_directory(dir) }
     end
 
     def save_json(attributes)
@@ -32,6 +32,10 @@ module Knish
 
     def make_root
       FileUtils.mkdir_p(config.model_root) unless File.exist?(config.model_root)
+    end
+
+    def make_directory(dir)
+      FileUtils.mkdir_p("#{config.model_root}/#{dir}") unless File.exist?("#{config.model_root}/#{dir}")
     end
   end
 end

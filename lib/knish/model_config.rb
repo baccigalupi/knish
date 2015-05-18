@@ -34,6 +34,10 @@ module Knish
       (existing_ids.max || 0) + 1
     end
 
+    def template_path
+      "#{view_to_db_path}/#{db_name}/#{path}/#{id}"
+    end
+
     private
 
     def existing_ids

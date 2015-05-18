@@ -16,7 +16,7 @@ module Knish
     end
 
     def template(key)
-      "#{config.view_to_db_path}/#{config.db_name}/#{config.path}/#{config.id}/#{key}"
+      "#{config.template_path}/#{key}"
     end
 
     private
