@@ -29,4 +29,3 @@ module Knish
     builder.make_model
   end
 end
-

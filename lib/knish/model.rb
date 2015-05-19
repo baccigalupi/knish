@@ -1,5 +1,9 @@
 module Knish
   class Model
+    if defined?(ActiveModel::Model)
+      include ActiveModel::Model
+    end
+
     def initialize(attrs=nil)
       attrs ||= {}
       extract_attrs(attrs)
