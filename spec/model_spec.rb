@@ -21,6 +21,8 @@ RSpec.describe Knish::Model do
   let(:attrs) { {} }
   let(:id) { nil }
 
+  let(:data_path) { "#{model.config.model_root}/data.json" }
+
   before do
     clear_db(db_fixture_path)
     Knish.clear_config
@@ -90,7 +92,7 @@ RSpec.describe Knish::Model do
 
     it 'saves to file the data attributes' do
       model.save
-      saved_data = JSON.parse(File.read("#{model.config.model_root}/data.json"))
+      saved_data = JSON.parse(File.read(data_path))
       expect(saved_data['name']).to eq(attrs[:name])
       expect(saved_data['url']).to eq(attrs[:url])
     end
@@ -102,7 +104,23 @@ RSpec.describe Knish::Model do
   end
 
   describe '#load' do
+    let(:model_directory) { File.dirname(data_path) }
 
+    before do
+      FileUtils.mkdir_p(model_directory)
+      File.open(data_path, 'w') { |f| f.write({name: 'Name'}.to_json) }
+      File.open("#{model_directory}/_description.md", 'w') { |f| f.write("#Hello") }
+    end
+
+    it 'loads the data into attributes' do
+      model.load
+      expect(model.name).to eq('Name')
+    end
+
+    it 'loads the markdown files into attributes' do
+      model.load
+      expect(model.description).to eq('#Hello')
+    end
   end
 
   describe '#template' do

@@ -2,7 +2,11 @@ require 'spec_helper'
 
 RSpec.describe Knish::Reader do
   let(:reader) { Knish::Reader.new(config) }
-  let(:config) { Knish::ModelConfig.new(fixture_db_config, 'posts', id) }
+  let(:config) {
+    c = Knish::ModelConfig.new(fixture_db_config, 'posts', id)
+    c.markdown_attributes = ['key']
+    c
+  }
   let(:id) { 32 }
 
   before { clear_db(db_fixture_path) }
@@ -14,7 +18,7 @@ RSpec.describe Knish::Reader do
     end
 
     it '#get_markdown returns an empty string' do
-      expect(reader.get_markdown('key')).to eq("")
+      expect(reader.get_markdown).to eq({'key' => ''})
     end
 
     it '#template returns the path as though it were there' do
@@ -34,7 +38,7 @@ RSpec.describe Knish::Reader do
     end
 
     it '#get_markdown returns the contents of the file' do
-      expect(reader.get_markdown('key')).to eq("#hello!")
+      expect(reader.get_markdown).to eq({'key' =>"#hello!"})
     end
 
     it '#template returns the path to the markdown file, rails style' do

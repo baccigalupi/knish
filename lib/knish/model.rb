@@ -14,6 +14,11 @@ module Knish
       writer.save_markdown(markdown_attributes)
     end
 
+    def load
+      extract_attrs(reader.get_json)
+      extract_attrs(reader.get_markdown)
+    end
+
     def config
       @config ||= self.class.config.clone
     end
