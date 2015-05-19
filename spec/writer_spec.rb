@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Knish::Writer do
-  let(:writer) { Knish::Writer.new(config, id) }
-  let(:config) { Knish::ModelConfig.new(fixture_db_config, 'posts') }
+  let(:writer) { Knish::Writer.new(config) }
+  let(:config) { Knish::ModelConfig.new(fixture_db_config, 'posts', id) }
   let(:id) { 32 }
 
   before { clear_db(db_fixture_path) }

@@ -6,6 +6,9 @@ RSpec.describe Knish::Model do
   let(:model_class) do
     Knish.build(path) do |config|
       config.db_directory = db_fixture_path
+      config.data_attributes = ['name', 'url']
+      config.markdown_attributes = ['description']
+      config.collections = ['stories']
     end
   end
 
@@ -17,6 +20,9 @@ RSpec.describe Knish::Model do
 
   let(:attrs) { {} }
   let(:id) { nil }
+
+  before { clear_db(db_fixture_path) }
+  after { clear_db(db_fixture_path) }
 
   context 'when no id is provided' do
     let(:id) { nil }
@@ -35,15 +41,6 @@ RSpec.describe Knish::Model do
   end
 
   describe 'configed attributes' do
-    let(:model_class) do
-      Knish.build(path) do |config|
-        config.db_directory = db_fixture_path
-        config.data_attributes = ['name', 'url']
-        config.markdown_attributes = ['description']
-        config.collections = ['stories']
-      end
-    end
-
     it 'should have getters and setters for the data attributes' do
       expect(model).to respond_to('name')
       expect(model).to respond_to('name=')
@@ -60,5 +57,46 @@ RSpec.describe Knish::Model do
       expect(model).to respond_to('stories')
       expect(model).to respond_to('stories=')
     end
+  end
+
+  context 'when configured with other attributes' do
+    let(:attrs) {
+      {
+        name: 'My New Project',
+        url: 'github.com/baccigalupi/my-new-project',
+        description: '#Headline!'
+      }
+    }
+
+    it 'loads each of these into an attribute' do
+      expect(model.name).to eq(attrs[:name])
+      expect(model.url).to eq(attrs[:url])
+      expect(model.description).to eq(attrs[:description])
+    end
+  end
+
+  describe '#save' do
+    let(:attrs) {
+      {
+        name: 'My New Project',
+        url: 'github.com/baccigalupi/my-new-project',
+        description: '#Headline!'
+      }
+    }
+
+    it 'saves to file the data attributes' do
+      model.save
+      saved_data = JSON.parse(File.read("#{model.config.model_root}/data.json"))
+      expect(saved_data['name']).to eq(attrs[:name])
+      expect(saved_data['url']).to eq(attrs[:url])
+    end
+  end
+
+  describe '#load' do
+
+  end
+
+  describe '#template' do
+
   end
 end

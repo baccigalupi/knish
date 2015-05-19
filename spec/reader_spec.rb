@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Knish::Reader do
-  let(:reader) { Knish::Reader.new(config, id) }
-  let(:config) { Knish::ModelConfig.new(fixture_db_config, 'posts') }
+  let(:reader) { Knish::Reader.new(config) }
+  let(:config) { Knish::ModelConfig.new(fixture_db_config, 'posts', id) }
   let(:id) { 32 }
 
   before { clear_db(db_fixture_path) }
@@ -24,7 +24,6 @@ RSpec.describe Knish::Reader do
 
   context 'when the data exists' do
     before do
-      reader # to setup the config with the id
       FileUtils.mkdir_p(config.model_root)
       File.open("#{config.model_root}/data.json", 'w') {|f| f.write({hello: 'happy json'}.to_json)}
       File.open("#{config.model_root}/_key.md", 'w') {|f| f.write("#hello!")}

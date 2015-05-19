@@ -1,10 +1,9 @@
 module Knish
   class Writer
-    attr_reader :config, :id
+    attr_reader :config
 
-    def initialize(config, id)
+    def initialize(config)
       @config = config
-      @config.id = id if id
     end
 
     def build_directories(directories)
