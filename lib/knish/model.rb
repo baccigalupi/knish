@@ -19,6 +19,10 @@ module Knish
       extract_attrs(reader.get_markdown)
     end
 
+    def template(key)
+      reader.template(key)
+    end
+
     def config
       @config ||= self.class.config.clone
     end

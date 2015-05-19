@@ -124,6 +124,12 @@ RSpec.describe Knish::Model do
   end
 
   describe '#template' do
+    let(:reader) { double('reader') }
 
+    it 'delegates it down to the reader' do
+      allow(Knish::Reader).to receive(:new).and_return(reader)
+      expect(reader).to receive(:template).with('key').and_return("some_path")
+      expect(model.template('key')).to eq('some_path')
+    end
   end
 end
