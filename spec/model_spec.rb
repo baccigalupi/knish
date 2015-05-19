@@ -21,8 +21,12 @@ RSpec.describe Knish::Model do
   let(:attrs) { {} }
   let(:id) { nil }
 
-  before { clear_db(db_fixture_path) }
-  after { clear_db(db_fixture_path) }
+  before do
+    clear_db(db_fixture_path)
+    Knish.clear_config
+  end
+
+  after  { clear_db(db_fixture_path) }
 
   context 'when no id is provided' do
     let(:id) { nil }
@@ -89,6 +93,11 @@ RSpec.describe Knish::Model do
       saved_data = JSON.parse(File.read("#{model.config.model_root}/data.json"))
       expect(saved_data['name']).to eq(attrs[:name])
       expect(saved_data['url']).to eq(attrs[:url])
+    end
+
+    it 'saves markdown files' do
+      model.save
+      expect(File.read("#{model.config.model_root}/_description.md")).to eq(attrs[:description])
     end
   end
 

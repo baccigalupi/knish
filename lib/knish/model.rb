@@ -11,6 +11,7 @@ module Knish
 
     def save
       writer.save_json(data_attributes)
+      writer.save_markdown(markdown_attributes)
     end
 
     def config
@@ -24,7 +25,15 @@ module Knish
     private
 
     def data_attributes
-      config.data_attributes.inject({}) do |hash, key|
+      extract_local_attributes(config.data_attributes)
+    end
+
+    def markdown_attributes
+      extract_local_attributes(config.markdown_attributes)
+    end
+
+    def extract_local_attributes(keys)
+      keys.inject({}) do |hash, key|
         hash[key] = public_send(key)
         hash
       end
