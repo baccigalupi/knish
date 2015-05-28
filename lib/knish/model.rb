@@ -12,6 +12,7 @@ module Knish
     extend Forwardable
 
     def_delegators :config, :id, :id=
+    def_delegators :reader, :persisted?
 
     def save
       writer.save_json(data_attributes)

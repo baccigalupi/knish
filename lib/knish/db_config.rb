@@ -3,7 +3,7 @@ module Knish
     attr_writer :db_directory, :view_to_db_path, :data_filename, :db_name
 
     def db_directory
-      @db_directory ||= `pwd`
+      @db_directory ||= `pwd`.chomp
     end
 
     def db_root

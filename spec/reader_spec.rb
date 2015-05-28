@@ -24,6 +24,10 @@ RSpec.describe Knish::Reader do
     it '#template returns the path as though it were there' do
       expect(reader.template('key')).to eq("/../../knish/posts/32/key")
     end
+
+    it 'should not be persisted' do
+      expect(reader.persisted?).to eq(false)
+    end
   end
 
   context 'when the data exists' do
@@ -43,6 +47,10 @@ RSpec.describe Knish::Reader do
 
     it '#template returns the path to the markdown file, rails style' do
       expect(reader.template('key')).to eq("/../../knish/posts/32/key")
+    end
+
+    it 'should be persisted' do
+      expect(reader.persisted?).to eq(true)
     end
   end
 end

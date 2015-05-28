@@ -21,6 +21,10 @@ module Knish
       "#{config.template_path}/#{key}"
     end
 
+    def persisted?
+      !!read_file(config.data_filename)
+    end
+
     private
 
     def read_file(filename)
