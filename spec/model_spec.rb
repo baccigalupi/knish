@@ -59,13 +59,12 @@ RSpec.describe Knish::Model do
       expect(model).to respond_to('description=')
     end
 
-    it 'should have getters and setters for the collections' do
+    it 'should have getters the collections' do
       expect(model).to respond_to('stories')
-      expect(model).to respond_to('stories=')
     end
   end
 
-  context 'when configured with other attributes' do
+  context 'when initilaized with attributes' do
     let(:attrs) {
       {
         name: 'My New Project',
@@ -74,7 +73,7 @@ RSpec.describe Knish::Model do
       }
     }
 
-    it 'loads each of these into an attribute' do
+    it 'puts each of these into an attribute' do
       expect(model.name).to eq(attrs[:name])
       expect(model.url).to eq(attrs[:url])
       expect(model.description).to eq(attrs[:description])
@@ -130,6 +129,38 @@ RSpec.describe Knish::Model do
       allow(Knish::Reader).to receive(:new).and_return(reader)
       expect(reader).to receive(:template).with('key').and_return("some_path")
       expect(model.template('key')).to eq('some_path')
+    end
+  end
+
+  describe 'adding to collections' do
+    let(:feature_class) {
+      Knish.build(path) do |config|
+        config.db_directory = db_fixture_path
+        config.data_attributes = ['name']
+        config.markdown_attributes = ['overview', 'description', 'scenarios']
+      end
+    }
+
+    let(:bug_class) {
+      Knish.build(path) do |config|
+        config.db_directory = db_fixture_path
+        config.data_attributes = ['name']
+        config.markdown_attributes = ['description', 'reproduction_steps', 'expected', 'actual', 'additional_information']
+      end
+    }
+
+    it 'stores and retrieves any kind of Knish object to the collection' do
+      model.stories.add(feature_class.new(name: 'Do something great, and quickly'))
+      model.stories.add(bug_class.new(name: 'Fix all the badness, go!'))
+
+      expect(model.stories.first).to be_a(feature_class)
+      expect(model.stories.last).to be_a(bug_class)
+    end
+
+    it 'will raise an error when adding a non-Knish object' do
+      expect {
+        model.stories.add({name: 'what is going on?'})
+      }.to raise_error
     end
   end
 end

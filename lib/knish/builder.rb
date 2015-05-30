@@ -11,7 +11,18 @@ module Knish
       klass = Class.new(Model)
       klass.config = config
       klass.send(:attr_accessor, *config.all_attributes)
+      add_collections(klass, config.collections)
       klass
+    end
+
+    def add_collections(klass, collections)
+      collections.each do |collection|
+        klass.class_eval <<-RUBY, __FILE__, __LINE__
+          def #{collection}
+            @#{collection} ||= Collection.new([])
+          end
+        RUBY
+      end
     end
 
     def config

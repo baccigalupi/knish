@@ -10,6 +10,7 @@ require "knish/writer"
 require "knish/reader"
 require "knish/builder"
 require "knish/model"
+require "knish/collection"
 
 module Knish
   def self.clear_config

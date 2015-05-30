@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Knish, '.build' do
   let(:config) { project_class.config }
 
-  context 'when all model level configuration' do
+  context 'when all model level configuration is provided' do
     let(:project_class) {
       Knish.build('projects') do |config|
         config.data_attributes = ['name', 'url']

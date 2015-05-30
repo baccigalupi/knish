@@ -23,7 +23,7 @@ module Knish
     end
 
     def all_attributes
-      data_attributes + markdown_attributes + collections
+      data_attributes + markdown_attributes
     end
 
     def collection_root

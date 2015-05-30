@@ -6,7 +6,7 @@ module Knish
 
     def initialize(attrs=nil)
       attrs ||= {}
-      extract_attrs(attrs)
+      add_attrs(attrs)
     end
 
     extend Forwardable
@@ -20,8 +20,8 @@ module Knish
     end
 
     def load
-      extract_attrs(reader.get_json)
-      extract_attrs(reader.get_markdown)
+      add_attrs(reader.get_json)
+      add_attrs(reader.get_markdown)
     end
 
     def template(key)
@@ -53,7 +53,7 @@ module Knish
       end
     end
 
-    def extract_attrs(attrs)
+    def add_attrs(attrs)
       attrs.each do |key, value|
         public_send("#{key}=", value)
       end
