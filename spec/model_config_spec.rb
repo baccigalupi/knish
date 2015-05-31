@@ -21,7 +21,7 @@ RSpec.describe Knish::ModelConfig do
 
   describe '#collection_root' do
     it 'returns the collection root path' do
-      expect(config.collection_root).to eq(File.expand_path("#{db_fixture_path}/projects"))
+      expect(config.collection_root).to eq(File.expand_path("#{db_fixture_path}/knish/projects"))
     end
   end
 

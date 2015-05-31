@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe Knish, '.configure' do
-  before { Knish.clear_config }
-
   it 'allows the configuration any values in the global config' do
     Knish.configure do |config|
       config.db_directory = db_fixture_path

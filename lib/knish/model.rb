@@ -17,11 +17,14 @@ module Knish
     def save
       writer.save_json(data_attributes)
       writer.save_markdown(markdown_attributes)
+      collections.each(&:save)
+      true
     end
 
     def load
       add_attrs(reader.get_json)
       add_attrs(reader.get_markdown)
+      true
     end
 
     def template(key)
@@ -37,6 +40,10 @@ module Knish
     end
 
     private
+
+    def collections
+      config.collections.map {|collection| send(collection) }
+    end
 
     def data_attributes
       extract_local_attributes(config.data_attributes)

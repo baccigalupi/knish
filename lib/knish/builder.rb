@@ -19,7 +19,7 @@ module Knish
       collections.each do |collection|
         klass.class_eval <<-RUBY, __FILE__, __LINE__
           def #{collection}
-            @#{collection} ||= Collection.new([])
+            @#{collection} ||= Collection.new('#{collection}', config)
           end
         RUBY
       end

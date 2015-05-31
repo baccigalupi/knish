@@ -23,12 +23,8 @@ RSpec.describe Knish::Model do
 
   let(:data_path) { "#{model.config.model_root}/data.json" }
 
-  before do
-    clear_db(db_fixture_path)
-    Knish.clear_config
-  end
-
-  after  { clear_db(db_fixture_path) }
+  before { clear_db(db_fixture_path) }
+  #after  { clear_db(db_fixture_path) }
 
   context 'when no id is provided' do
     let(:id) { nil }
@@ -93,7 +89,7 @@ RSpec.describe Knish::Model do
       model.save
       saved_data = JSON.parse(File.read(data_path))
       expect(saved_data['name']).to eq(attrs[:name])
-      expect(saved_data['url']).to eq(attrs[:url])
+      expect(saved_data['url']).to  eq(attrs[:url])
     end
 
     it 'saves markdown files' do
@@ -134,7 +130,7 @@ RSpec.describe Knish::Model do
 
   describe 'adding to collections' do
     let(:feature_class) {
-      Knish.build(path) do |config|
+      Knish.build('features') do |config|
         config.db_directory = db_fixture_path
         config.data_attributes = ['name']
         config.markdown_attributes = ['overview', 'description', 'scenarios']
@@ -142,7 +138,7 @@ RSpec.describe Knish::Model do
     }
 
     let(:bug_class) {
-      Knish.build(path) do |config|
+      Knish.build('bugs') do |config|
         config.db_directory = db_fixture_path
         config.data_attributes = ['name']
         config.markdown_attributes = ['description', 'reproduction_steps', 'expected', 'actual', 'additional_information']
@@ -150,17 +146,20 @@ RSpec.describe Knish::Model do
     }
 
     it 'stores and retrieves any kind of Knish object to the collection' do
-      model.stories.add(feature_class.new(name: 'Do something great, and quickly'))
-      model.stories.add(bug_class.new(name: 'Fix all the badness, go!'))
+      model.stories << feature_class.new(name: 'Do something great, and quickly')
+      model.stories << bug_class.new(name: 'Fix all the badness, go!')
 
-      expect(model.stories.first).to be_a(feature_class)
-      expect(model.stories.last).to be_a(bug_class)
+      expect(model.stories.first.name).to eq('Do something great, and quickly')
+      expect(model.stories.last.name).to eq('Fix all the badness, go!')
     end
 
-    it 'will raise an error when adding a non-Knish object' do
-      expect {
-        model.stories.add({name: 'what is going on?'})
-      }.to raise_error
+    it 'saves the models to the right location' do
+      model.stories << feature_class.new(name: 'Do something great, and quickly')
+      model.stories << bug_class.new(name: 'Fix all the badness, go!')
+
+      model.save
+
+      expect(File.exist?("#{model.config.model_root}/stories/1")).to be(true)
     end
   end
 end

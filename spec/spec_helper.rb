@@ -20,4 +20,11 @@ RSpec.configure do |config|
 
   config.order = :random
   Kernel.srand config.seed
+
+  config.before {
+    Knish.clear_config
+    Knish.configure do |c|
+      c.db_directory = db_fixture_path
+    end
+  }
 end

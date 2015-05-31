@@ -11,6 +11,7 @@ require "knish/reader"
 require "knish/builder"
 require "knish/model"
 require "knish/collection"
+require "knish/collection_member"
 
 module Knish
   def self.clear_config
