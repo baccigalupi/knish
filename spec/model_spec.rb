@@ -4,19 +4,8 @@ RSpec.describe Knish::Model do
   let(:model) { model_class.new(attrs) }
 
   let(:model_class) do
-    Knish.build(path) do |config|
-      config.db_directory = db_fixture_path
-      config.data_attributes = ['name', 'url']
-      config.markdown_attributes = ['description']
-      config.collections = ['stories']
-    end
+    Project # defined in support
   end
-
-  let(:config) do
-    Knish::ModelConfig.new(fixture_db_config, path, id)
-  end
-
-  let(:path) { 'projects' }
 
   let(:attrs) { {} }
   let(:id) { nil }
@@ -69,7 +58,7 @@ RSpec.describe Knish::Model do
       }
     }
 
-    it 'puts each of these into an attribute' do
+    it 'sets each of these into an attribute' do
       expect(model.name).to eq(attrs[:name])
       expect(model.url).to eq(attrs[:url])
       expect(model.description).to eq(attrs[:description])
@@ -85,11 +74,19 @@ RSpec.describe Knish::Model do
       }
     }
 
+    let(:saved_data) { JSON.parse(File.read(data_path)) }
+
+    let(:model) { Nested::Deeply::Is::Project.new(attrs) }
+
     it 'saves to file the data attributes' do
       model.save
-      saved_data = JSON.parse(File.read(data_path))
       expect(saved_data['name']).to eq(attrs[:name])
       expect(saved_data['url']).to  eq(attrs[:url])
+    end
+
+    it 'also save the class name in a specal attribute' do
+      model.save
+      expect(saved_data['___type']).to eq('Nested::Deeply::Is::Project')
     end
 
     it 'saves markdown files' do
@@ -129,37 +126,35 @@ RSpec.describe Knish::Model do
   end
 
   describe 'adding to collections' do
-    let(:feature_class) {
-      Knish.build('features') do |config|
-        config.db_directory = db_fixture_path
-        config.data_attributes = ['name']
-        config.markdown_attributes = ['overview', 'description', 'scenarios']
-      end
-    }
-
-    let(:bug_class) {
-      Knish.build('bugs') do |config|
-        config.db_directory = db_fixture_path
-        config.data_attributes = ['name']
-        config.markdown_attributes = ['description', 'reproduction_steps', 'expected', 'actual', 'additional_information']
-      end
-    }
-
     it 'stores and retrieves any kind of Knish object to the collection' do
-      model.stories << feature_class.new(name: 'Do something great, and quickly')
-      model.stories << bug_class.new(name: 'Fix all the badness, go!')
+      model.stories << Feature.new(name: 'Do something great, and quickly')
+      model.stories << Bug.new(name: 'Fix all the badness, go!')
 
       expect(model.stories.first.name).to eq('Do something great, and quickly')
       expect(model.stories.last.name).to eq('Fix all the badness, go!')
     end
 
     it 'saves the models to the right location' do
-      model.stories << feature_class.new(name: 'Do something great, and quickly')
-      model.stories << bug_class.new(name: 'Fix all the badness, go!')
+      model.stories << Feature.new(name: 'Do something great, and quickly')
+      model.stories << Bug.new(name: 'Fix all the badness, go!')
 
       model.save
 
       expect(File.exist?("#{model.config.model_root}/stories/1")).to be(true)
+    end
+  end
+
+  describe 'loading collections' do
+
+
+  end
+
+  context 'in order to have the models work well in forms for ActiveModel' do
+    let(:naming) { double('naming class') }
+
+    it 'shortens the name' do
+      expect(ActiveModel::Name).to receive(:new).with(Nested::Deeply::Is::Project, Nested::Deeply::Is).and_return(naming)
+      Nested::Deeply::Is::Project.model_name
     end
   end
 end

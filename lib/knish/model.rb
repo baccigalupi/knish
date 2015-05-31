@@ -2,6 +2,11 @@ module Knish
   class Model
     if defined?(ActiveModel::Model)
       include ActiveModel::Model
+
+      def self.model_name
+        space = respond_to?(:omitted_namespace) ? omitted_namespace : nil
+        ActiveModel::Name.new(self, space)
+      end
     end
 
     def initialize(attrs=nil)
@@ -46,7 +51,7 @@ module Knish
     end
 
     def data_attributes
-      extract_local_attributes(config.data_attributes)
+      extract_local_attributes(config.data_attributes).merge(___type: self.class.to_s)
     end
 
     def markdown_attributes

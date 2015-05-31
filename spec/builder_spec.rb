@@ -5,11 +5,7 @@ RSpec.describe Knish, '.build' do
 
   context 'when all model level configuration is provided' do
     let(:project_class) {
-      Knish.build('projects') do |config|
-        config.data_attributes = ['name', 'url']
-        config.markdown_attributes = ['description']
-        config.collections = ['stories']
-      end
+      Project # defined in support
     }
 
     it 'builds a model class with the right attributes' do

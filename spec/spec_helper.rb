@@ -1,5 +1,9 @@
 $: << File.dirname(__FILE__) + "/../lib"
+
+require_relative "fixtures/active_model_mock"
+
 require 'knish'
+require 'bundler'
 
 Dir.glob(File.dirname(__FILE__) + "/support/**/*").each {|f| require f}
 
