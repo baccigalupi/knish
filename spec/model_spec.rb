@@ -24,7 +24,7 @@ RSpec.describe Knish::Model do
   let(:data_path) { "#{model.config.model_root}/data.json" }
 
   before { clear_db(db_fixture_path) }
-  #after  { clear_db(db_fixture_path) }
+  after  { clear_db(db_fixture_path) }
 
   context 'when no id is provided' do
     let(:id) { nil }
