@@ -14,6 +14,10 @@ module Knish
       self
     end
 
+    def self.model_name
+      model.class.model_name
+    end
+
     private
 
     def raise_if_unacceptable
