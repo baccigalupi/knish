@@ -25,12 +25,7 @@ module Nested
         config.data_attributes = ['name', 'url']
         config.markdown_attributes = ['description']
         config.collections = ['stories']
-      end
-
-      class Project
-        def self.omitted_namespace
-          Nested::Deeply::Is
-        end
+        config.omitted_namespace = Nested::Deeply::Is
       end
     end
   end

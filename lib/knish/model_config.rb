@@ -1,6 +1,6 @@
 module Knish
   class ModelConfig < SimpleDelegator
-    attr_accessor :db_config, :path, :id
+    attr_accessor :db_config, :path, :id, :omitted_namespace
     attr_writer :data_attributes, :markdown_attributes, :collections
 
     def initialize(db_config, path, id=nil)

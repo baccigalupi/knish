@@ -4,8 +4,7 @@ module Knish
       include ActiveModel::Model
 
       def self.model_name
-        space = respond_to?(:omitted_namespace) ? omitted_namespace : nil
-        ActiveModel::Name.new(self, space)
+        ActiveModel::Name.new(self, omitted_namespace)
       end
     end
 
@@ -45,6 +44,10 @@ module Knish
 
     class << self
       attr_accessor :config
+    end
+
+    def self.omitted_namespace
+      config.omitted_namespace
     end
 
     private
