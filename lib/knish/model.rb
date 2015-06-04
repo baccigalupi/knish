@@ -47,7 +47,7 @@ module Knish
     end
 
     def self.omitted_namespace
-      config.omitted_namespace
+      config && config.omitted_namespace
     end
 
     private

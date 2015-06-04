@@ -57,8 +57,9 @@ module Knish
       config.model_paths.map do |path|
         model_config = config.clone
         model_config.id = path.split('/').last.to_i
-        reader = Reader.new(model_config)
+        Reader.new(model_config)
       end
     end
+
   end
 end
