@@ -145,8 +145,31 @@ RSpec.describe Knish::Model do
   end
 
   describe 'loading collections' do
+    let(:attrs) {
+      {
+        name: 'My New Project',
+        url: 'github.com/baccigalupi/my-new-project',
+        description: '#Headline!'
+      }
+    }
 
+    before do
+      model.stories << Feature.new(name: 'Make it go', description: 'Do I have to specify this?')
+      model.stories << Bug.new(name: 'It just doesn\'t work', description: 'Do I have to specify this?')
+      model.save
+    end
 
+    let(:loaded_model) {
+      project = Project.new(id: model.id)
+      project.load
+      project
+    }
+
+    it 'builds the right classes for collection models' do
+      expect(loaded_model.stories.size).to eq(2)
+      expect(loaded_model.stories.first.model).to be_a(Feature)
+      expect(loaded_model.stories.last.model).to be_a(Bug)
+    end
   end
 
   context 'in order to have the models work well in forms for ActiveModel' do

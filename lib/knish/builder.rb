@@ -11,6 +11,7 @@ module Knish
       klass = Class.new(Model)
       klass.config = config
       klass.send(:attr_accessor, *config.all_attributes)
+      klass.send(:attr_writer, *config.collections)
       add_collections(klass, config.collections)
       klass
     end

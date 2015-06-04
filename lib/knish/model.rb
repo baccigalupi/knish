@@ -9,6 +9,8 @@ module Knish
       end
     end
 
+    attr_writer :config
+
     def initialize(attrs=nil)
       attrs ||= {}
       add_attrs(attrs)
@@ -29,6 +31,7 @@ module Knish
     def load
       add_attrs(reader.get_json)
       add_attrs(reader.get_markdown)
+      add_attrs(reader.get_collections)
       true
     end
 
@@ -67,6 +70,7 @@ module Knish
 
     def add_attrs(attrs)
       attrs.each do |key, value|
+        next if key.to_sym == config.type_key.to_sym
         public_send("#{key}=", value)
       end
     end

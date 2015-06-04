@@ -65,4 +65,34 @@ RSpec.describe Knish::Collection do
       collection.save
     end
   end
+
+  describe '#load' do
+    before do
+      FileUtils.mkdir_p(collection.config.collection_root + "/1")
+      File.open(collection.config.collection_root + "/1/data.json", 'w') {|f| f.write({name: 'Hello', ___type: 'Feature'}.to_json) }
+      FileUtils.mkdir_p(collection.config.collection_root + "/2")
+      File.open(collection.config.collection_root + "/2/data.json", 'w') {|f| f.write({name: 'Goodbye', ___type: 'Bug'}.to_json) }
+    end
+
+    after  { clear_db(db_fixture_path) }
+
+    it 'should be the right size' do
+      collection.load
+      expect(collection.size).to eq(2)
+    end
+
+    it 'should remove existing models' do
+      project = Project.new(name: 'not for saving, thanks!')
+      collection << project
+      collection.load
+      expect(collection).not_to include(project)
+    end
+
+    it 'should build the right type of models for each' do
+      collection.load
+
+      expect(collection.first.model).to be_a(Feature)
+      expect(collection.last.model).to be_a(Bug)
+    end
+  end
 end

@@ -20,6 +20,15 @@ module Knish
       each(&:save)
     end
 
+    def load
+      clear
+      models.each do |model|
+        model.load
+        add(model)
+      end
+      self
+    end
+
     def next_id
       config.next_id + select{|m| !m.persisted? }.size
     end
@@ -29,6 +38,27 @@ module Knish
       @config = parent_config.clone
       @config.path = "#{@config.path}/#{parent_config.id}/#{name}"
       @config
+    end
+
+    private
+
+    def models
+      model_readers.map do |reader|
+        data = reader.get_json
+        class_name = data[config.type_key]
+        next unless class_name
+        model_class = eval(class_name)
+        model = model_class.new
+        model
+      end.compact
+    end
+
+    def model_readers
+      config.model_paths.map do |path|
+        model_config = config.clone
+        model_config.id = path.split('/').last.to_i
+        reader = Reader.new(model_config)
+      end
     end
   end
 end

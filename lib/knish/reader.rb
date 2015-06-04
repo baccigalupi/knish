@@ -17,6 +17,15 @@ module Knish
       end
     end
 
+    def get_collections
+      config.collections.inject({}) do |hash, collection_name|
+        collection = Collection.new(collection_name, config)
+        collection.load
+        hash[collection_name] = collection
+        hash
+      end
+    end
+
     def template(key)
       "#{config.template_path}/#{key}"
     end
@@ -25,11 +34,11 @@ module Knish
       !!read_file(config.data_filename)
     end
 
-    private
-
     def read_file(filename)
       File.read("#{config.model_root}/#{filename}") rescue nil
     end
+
+    private
 
     def read_markdown(key)
       read_file("_#{key}.md") || ""

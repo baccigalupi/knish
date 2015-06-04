@@ -21,5 +21,9 @@ module Knish
     def data_filename
       @data_filename ||= 'data.json'
     end
+
+    def type_key
+      '___type'
+    end
   end
 end

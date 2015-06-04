@@ -42,10 +42,14 @@ module Knish
       "#{view_to_db_path}/#{db_name}/#{path}/#{id}"
     end
 
+    def model_paths
+      Dir.glob("#{collection_root}/*")
+    end
+
     private
 
     def existing_ids
-      Dir.glob("#{collection_root}/*").map{|dir| dir.split('/').last.to_i }
+      model_paths.map{|dir| dir.split('/').last.to_i }
     end
   end
 end
