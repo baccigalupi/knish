@@ -11,11 +11,12 @@ module Knish
     def validate_and_reconfigure
       raise_if_unacceptable
       update_config
+      self.class.model_name ||= model.class.model_name # what's not to hate about Rails forms
       self
     end
 
-    def self.model_name
-      model.class.model_name
+    class << self
+      attr_accessor :model_name
     end
 
     private
