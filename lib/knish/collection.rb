@@ -9,9 +9,7 @@ module Knish
     end
 
     def add(model)
-      member = CollectionMember.new(model, self)
-      member.validate_and_reconfigure
-      push(member)
+      push(configure(model))
     end
 
     alias :<< :add
@@ -38,6 +36,11 @@ module Knish
       @config = parent_config.clone
       @config.path = "#{@config.path}/#{parent_config.id}/#{name}"
       @config
+    end
+
+    def configure(model)
+      member = CollectionMember.new(model, self)
+      member.validate_and_reconfigure
     end
 
     private
