@@ -1,15 +1,16 @@
 module Knish
   class Collection < SimpleDelegator
-    attr_reader :name, :parent_config
+    attr_reader :name, :config
 
     def initialize(name, parent_config)
       super([])
       @name = name
-      @parent_config = parent_config
+      @config = CollectionConfig.new(parent_config, name)
     end
 
     def add(model)
-      push(configure(model))
+      configure(model)
+      push(model)
     end
 
     alias :<< :add
@@ -20,49 +21,24 @@ module Knish
 
     def load
       clear
-      models.each do |model|
-        model.load
-        add(model)
+      config.generic_model_configs.each do |c|
+        push(
+          Member.new(config, c).loaded_model
+        )
       end
       self
     end
+
+    #def new(klass, attributes)
+      
+    #end
 
     def next_id
       config.next_id + select{|m| !m.persisted? }.size
     end
 
-    def config
-      return @config if @config
-      @config = parent_config.clone
-      @config.path = "#{@config.path}/#{parent_config.id}/#{name}"
-      @config
-    end
-
     def configure(model)
-      member = CollectionMember.new(model, self)
-      member.validate_and_reconfigure
+      model.config = config.member_config(model.config)
     end
-
-    private
-
-    def models
-      model_readers.map do |reader|
-        data = reader.get_json
-        class_name = data[config.type_key]
-        next unless class_name
-        model_class = eval(class_name)
-        model = model_class.new
-        model
-      end.compact
-    end
-
-    def model_readers
-      config.model_paths.map do |path|
-        model_config = config.clone
-        model_config.id = path.split('/').last.to_i
-        Reader.new(model_config)
-      end
-    end
-
   end
 end

@@ -91,8 +91,8 @@ RSpec.describe Knish::Collection do
     it 'should build the right type of models for each' do
       collection.load
 
-      expect(collection.first.model).to be_a(Feature)
-      expect(collection.last.model).to be_a(Bug)
+      expect(collection.first).to be_a(Feature)
+      expect(collection.last).to be_a(Bug)
     end
   end
 end

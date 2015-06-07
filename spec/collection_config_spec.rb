@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Knish::CollectionConfig do
-  let(:config) { Knish::CollectionConfig.new(db_config, model_config, path) }
-  let(:db_config) { Knish.config } # already altered by spec helper to look in fixtures
+  let(:config) { Knish::CollectionConfig.new(model_config, path) }
   let(:model_config) { Project.config }
   let(:path) { 'stories' }
 
@@ -31,7 +30,7 @@ RSpec.describe Knish::CollectionConfig do
   end
 
   describe '#memeber_config(klass, id)' do
-    let(:member_config) { config.member_config(Bug, 2) }
+    let(:member_config) { config.member_config(Bug.config, 2) }
 
     it 'should have the model attributes of the class' do
       expect(member_config.all_attributes).to eq(Bug.config.all_attributes)

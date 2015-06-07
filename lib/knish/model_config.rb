@@ -35,21 +35,17 @@ module Knish
     end
 
     def next_id
-      (existing_ids.max || 0) + 1
+      ExistingModels.new(collection_root).next_id
     end
 
     def template_path
       "#{view_to_db_path}/#{db_name}/#{path}/#{id}"
     end
 
-    def model_paths
-      Dir.glob("#{collection_root}/*")
-    end
-
-    private
-
-    def existing_ids
-      model_paths.map{|dir| dir.split('/').last.to_i }
+    def inspect
+      DelegateInspector.new(self,
+        [:db_config, :path, :id, :omitted_namespace, :data_attributes, :markdown_attributes, :collections]
+      ).to_inspect
     end
   end
 end

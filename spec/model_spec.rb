@@ -167,8 +167,13 @@ RSpec.describe Knish::Model do
 
     it 'builds the right classes for collection models' do
       expect(loaded_model.stories.size).to eq(2)
-      expect(loaded_model.stories.first.model).to be_a(Feature)
-      expect(loaded_model.stories.last.model).to be_a(Bug)
+      expect(loaded_model.stories.first).to be_a(Feature)
+      expect(loaded_model.stories.last).to be_a(Bug)
+    end
+
+    it 'models have the right ids' do
+      expect(loaded_model.stories.first.id).to eq(1)
+      expect(loaded_model.stories.last.id).to eq(2)
     end
   end
 
