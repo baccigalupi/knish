@@ -30,7 +30,7 @@ module Knish
     end
 
     #def new(klass, attributes)
-      
+
     #end
 
     def next_id
@@ -39,6 +39,7 @@ module Knish
 
     def configure(model)
       model.config = config.member_config(model.config)
+      model
     end
   end
 end

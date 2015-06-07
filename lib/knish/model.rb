@@ -12,7 +12,7 @@ module Knish
 
     def initialize(attrs=nil)
       attrs ||= {}
-      add_attrs(attrs)
+      set(attrs)
     end
 
     extend Forwardable
@@ -28,10 +28,17 @@ module Knish
     end
 
     def load
-      add_attrs(reader.get_json)
-      add_attrs(reader.get_markdown)
-      add_attrs(reader.get_collections)
+      set(reader.get_json)
+      set(reader.get_markdown)
+      set(reader.get_collections)
       true
+    end
+
+    def set(attrs)
+      attrs.each do |key, value|
+        next if key.to_sym == config.type_key.to_sym
+        public_send("#{key}=", value)
+      end
     end
 
     def template(key)
@@ -68,13 +75,6 @@ module Knish
       keys.inject({}) do |hash, key|
         hash[key] = public_send(key)
         hash
-      end
-    end
-
-    def add_attrs(attrs)
-      attrs.each do |key, value|
-        next if key.to_sym == config.type_key.to_sym
-        public_send("#{key}=", value)
       end
     end
 
