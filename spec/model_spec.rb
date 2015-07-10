@@ -125,7 +125,7 @@ RSpec.describe Knish::Model do
     end
   end
 
-  describe 'adding to collections' do
+  describe 'adding to collections, and saving on that collection directly' do
     it 'stores and retrieves any kind of Knish object to the collection' do
       model.stories << Feature.new(name: 'Do something great, and quickly')
       model.stories << Bug.new(name: 'Fix all the badness, go!')
@@ -138,13 +138,13 @@ RSpec.describe Knish::Model do
       model.stories << Feature.new(name: 'Do something great, and quickly')
       model.stories << Bug.new(name: 'Fix all the badness, go!')
 
-      model.save
+      model.stories.save
 
       expect(File.exist?("#{model.config.model_root}/stories/1")).to be(true)
     end
   end
 
-  describe 'loading collections' do
+  describe 'loading collections, is done via direct call to collection through the model' do
     let(:attrs) {
       {
         name: 'My New Project',
@@ -156,12 +156,12 @@ RSpec.describe Knish::Model do
     before do
       model.stories << Feature.new(name: 'Make it go', description: 'Do I have to specify this?')
       model.stories << Bug.new(name: 'It just doesn\'t work', description: 'Do I have to specify this?')
-      model.save
+      model.stories.save
     end
 
     let(:loaded_model) {
       project = Project.new(id: model.id)
-      project.load
+      project.stories.load
       project
     }
 

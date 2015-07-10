@@ -29,10 +29,6 @@ module Knish
       self
     end
 
-    #def new(klass, attributes)
-
-    #end
-
     def next_id
       config.next_id + select{|m| !m.persisted? }.size
     end

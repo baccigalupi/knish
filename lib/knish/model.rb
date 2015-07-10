@@ -23,14 +23,12 @@ module Knish
     def save
       writer.save_json(data_attributes)
       writer.save_markdown(markdown_attributes)
-      collections.each(&:save)
       true
     end
 
     def load
       set(reader.get_json)
       set(reader.get_markdown)
-      set(reader.get_collections)
       true
     end
 
